@@ -1,0 +1,241 @@
+/*<style type="text/css">*/
+
+body,td,th {
+	font-family: MS Sans Serif;
+	color: #000000;
+}
+body {
+	font: normal 11px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	background: #E6EAE9;
+}
+a{	font-family: MS Sans Serif;}
+a:active{ color: #FFFF00}
+a:link {text-decoration: none; }
+a:hover{
+   color:#ff0303;
+   border-bottom:1px solid #000000;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: MS Sans Serif;
+}
+.style1 {
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 12px;
+}
+.style12 {
+	color: #0000CC;
+	font-size: 12px;
+}
+.style14 {
+	color: #0000FF;
+	/*font-weight: bold;*/
+	font-size: 14px;
+}
+.style14w {
+	color: #FFFFFF;
+	/*font-weight: bold;#FF0000*/
+	font-size: 14px;
+}
+.style14b {
+	color: #0000FF;
+	font-weight: bold;
+	font-size: 14px;
+}
+.style14r{
+    color: #FF0000;
+	/*font-weight: bold;*/
+	font-size: 14px;
+}
+.style16 {
+	color: #0000FF;
+	font-weight: bold;
+	font-size: 16px;
+}
+.style5 {
+	color: #FF0000;
+	font-weight: bold;
+	font-size: 20px;
+}
+.style6 {
+	color: #FF0000;
+	font-size: 20px;
+}
+.style7 {
+	color: #6C3600;
+	font-weight: bold;
+	font-size: 14px;
+}
+.style8 {
+	color: #FFFFFF;
+	font-size: 12px;
+}
+.style10 {
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 12px;
+}
+.style18 {
+	font-size: 14px;
+	color: #3b7501;
+	font-weight: bold;
+}
+.style19 {color: #3b7501; font-size: 14px;}
+.style32 {
+	font-family: "MS Sans Serif";
+	font-size: 16px;
+	font-style: normal;
+	color: #660033;
+}
+.username {
+
+/* à¹?à¸?à¸?à¸ à¸²à¸?à¸?à¸·à¹?à¸?à¸«à¸¥à¸±à¸?à¹?à¸«à¹?à¸?à¸±à¸? à¸?à¹?à¸­à¸?à¸?à¹?à¸­à¸?à¸?à¹?à¸­à¸¡à¸¹à¸¥*/
+background-image: url(../images/icon_user.gif);
+
+/*à¹?à¸¡à¹?à¸?à¹?à¸­à¸?à¸£à¸µà¸?à¸µà¸? à¹?à¸?à¸µà¹?à¸¢à¸§à¸¡à¸±à¸?à¹?à¸?à¹?à¸?à¸ à¸²à¸?à¹?à¸£à¸µà¸¢à¸?à¸?à¹?à¸­à¸?à¸?à¸±à¸?à¹?à¸?à¹?à¸¡ à¸?à¹?à¸­à¸?*/
+background-repeat: no-repeat;
+
+/*à¸?à¸±à¹?à¸?à¸«à¸?à¹?à¸²à¸?à¸°à¸«à¸?à¹?à¸­à¸¢ à¹?à¸§à¸¥à¸²à¸?à¸´à¸¡à¸?à¹? à¸?à¸±à¸§à¸«à¸?à¸±à¸?à¸ªà¸·à¸­à¸?à¸°à¹?à¸?à¹?à¹?à¸¡à¹?à¸?à¸±à¸?à¸¥à¸?à¸?à¸?à¸ à¸²à¸?à¸?à¸·à¹?à¸?à¸«à¸¥à¸±à¸?*/
+padding-left: 20px;
+}
+.password {
+background-image: url(../images/bullet_key.png);
+background-repeat: no-repeat;
+padding-left: 20px;
+
+}
+.dateinput {
+
+/* à¹?à¸?à¸?à¸ à¸²à¸?à¸?à¸·à¹?à¸?à¸«à¸¥à¸±à¸?à¹?à¸«à¹?à¸?à¸±à¸? à¸?à¹?à¸­à¸?à¸?à¹?à¸­à¸?à¸?à¹?à¸­à¸¡à¸¹à¸¥*/
+background-image: url(../images/cal.gif);
+
+/*à¹?à¸¡à¹?à¸?à¹?à¸­à¸?à¸£à¸µà¸?à¸µà¸? à¹?à¸?à¸µà¹?à¸¢à¸§à¸¡à¸±à¸?à¹?à¸?à¹?à¸?à¸ à¸²à¸?à¹?à¸£à¸µà¸¢à¸?à¸?à¹?à¸­à¸?à¸?à¸±à¸?à¹?à¸?à¹?à¸¡ à¸?à¹?à¸­à¸?*/
+background-repeat: no-repeat;
+
+/*à¸?à¸±à¹?à¸?à¸«à¸?à¹?à¸²à¸?à¸°à¸«à¸?à¹?à¸­à¸¢ à¹?à¸§à¸¥à¸²à¸?à¸´à¸¡à¸?à¹? à¸?à¸±à¸§à¸«à¸?à¸±à¸?à¸ªà¸·à¸­à¸?à¸°à¹?à¸?à¹?à¹?à¸¡à¹?à¸?à¸±à¸?à¸¥à¸?à¸?à¸?à¸ à¸²à¸?à¸?à¸·à¹?à¸?à¸«à¸¥à¸±à¸?*/
+/*MS Sans Serif*/
+/*Trebuchet MS*/
+padding-left: 16px;
+}
+th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border-right: 1px solid #C1DAD7;
+	/**/border-bottom: 1px solid #C1DAD7;
+        /*border-bottom: 1px solid black;*/
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url(../images/bg_header.jpg) no-repeat;
+}
+
+th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	/*background: #fff;*/
+	padding: 6px 2px 2px 2px;
+	color: #6D929B;
+}
+td.alt {
+	background: #F5FAFA;
+	color: #B4AA9D;
+}
+th.spec {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #fff url(../images/bullet1.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+th.specalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url(../images/bullet2.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+/*font:bold 10px/12px verdana,arial,serif;*/
+input[type="text"] {
+font: 12px/14px MS Sans Serif;
+padding:1px;
+padding-left: 16px;
+}
+
+input:focus {background-color:#FFFF66;}
+
+
+.input_text[type="text"] {
+font: 12px/14px MS Sans Serif;
+padding:1px;
+padding-left: 1px;
+}
+
+.input_text:focus {background-color:#FFFF66;}
+
+
+#tabs {
+      float:left;
+      width:100%;
+      background:#BBD9EE;
+      font-size:93%;
+      line-height:normal;
+      }
+    #tabs ul {
+        margin:0;
+        padding:10px 10px 0 50px;
+        list-style:none;
+      }
+    #tabs li {
+      display:inline;
+      margin:0;
+      padding:0;
+      }
+    #tabs a {
+      float:left;
+      background:url("../images/tableft.gif") no-repeat left top;
+      margin:0;
+      padding:0 0 0 4px;
+      text-decoration:none;
+      }
+    #tabs a span {
+      float:left;
+      display:block;
+      background:url("../images/tabright.gif") no-repeat right top;
+      padding:5px 15px 4px 6px;
+      color:#666;
+      }
+    /* Commented Backslash Hack hides rule from IE5-Mac \*/
+    #tabs a span {float:none;}
+    /* End IE5-Mac hack */
+    #tabs a:hover span {
+      color:#FF9834;
+      }
+    #tabs a:hover {
+      background-position:0% -42px;
+      }
+    #tabs a:hover span {
+      background-position:100% -42px;
+      }
+
+        #tabs #current a {
+                background-position:0% -42px;
+        }
+        #tabs #current a span {
+                background-position:100% -42px;
+        }
+
+/*</style>*/
+

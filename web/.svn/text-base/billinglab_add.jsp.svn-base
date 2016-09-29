@@ -1,0 +1,501 @@
+<%-- 
+    Document   : admin_bill_lab_add
+    Created on : 22 ก.ค. 2552, 22:42:28
+    Author     : pop
+--%>
+<%@page import="javazoom.upload.UploadFile"%>
+<%@page import="javazoom.upload.MultipartFormDataRequest"%>
+<%@page import="bangnaLibrary.ComboDB"%>
+<%@page import="bangnalab.AdminTBillLab"%>
+<%@page import="bangnalab.AdminTBillLabDB"%>
+<%@page import="bangnaLibrary.Config1"%>
+<%@page import ="java.sql.*" %>
+<%@page import ="java.text.*" %>
+<%@page import ="java.util.* " %>
+<%@page import ="javax.swing.JOptionPane;" %>
+<%@page contentType="text/html" pageEncoding="TIS-620"%>
+<jsp:useBean id="upBean" scope="page" class="javazoom.upload.UploadBean" >
+<jsp:setProperty name="upBean" property="folderstore" value="/var/www/intranet/billlab/" />
+</jsp:useBean>
+<%
+Config1 config1 = new Config1();
+ComboDB combodb = new ComboDB();
+AdminTBillLabDB abldb = new AdminTBillLabDB();
+Vector v_abl = new Vector();
+String text = "", abl_id="",cbo_year="", cbo_month="", cbo_period="";
+String abl_date="", date_bill_receive="", date_bill_make="";
+String total_record_approve="", total_amount_receive="", total_amount_approve="", total_record_receive="";
+String tr_abl_detail="", flag="",total_amount_unapprove="",total_record_unapprove="";
+String branch_id="",cbo_branch="",flagpage="",uploadfile="",text1="",todo="",upload="",path_file="/var/www/intranet/billlab/";
+String btlId="",description="", remark="",year_id="", month_id="", period_id="",save="",billing_date="";
+Boolean chk_new = false;
+try{
+    if(request.getParameter("abl_id")!=null){
+        abl_id = new String (request.getParameter("abl_id").getBytes("ISO8859_1"),"TIS-620");
+    }
+    if(request.getParameter("flagpage")!=null){
+        flagpage = request.getParameter("flagpage");
+    }
+    abldb.abl = abldb.getBillLabByPK(abl_id);
+    if(abldb.abl.getBillLabId().equals("")){
+        billing_date = abldb.config1.getDateDBHospital("yyyyMMdd");
+        abldb.abl.setBillLabDate(billing_date);
+        //mkcdb.initMktCl(branch_id);
+        chk_new = true;
+    }else if(flagpage.equals("search") || flagpage.equals("viewdetail")){
+        //text = ltbdb.getTrLabBillingGroup2(branch_id, abl_id);
+        chk_new = false;
+    }
+    //v_bill_lab_detail = bill_lab_detaildb.getBillLabDetail(bill_lab_id,"date");
+    
+    if(request.getParameter("cbo_branch")!=null) {
+        branch_id = new String (request.getParameter("cbo_branch").getBytes("ISO8859_1"),"TIS-620");
+    }
+    if(branch_id.equals("")){
+        branch_id = abldb.abl.getBranchId();
+    }
+    if(request.getParameter("abl_date")!=null){
+        abl_date = new String (request.getParameter("abl_date").getBytes("ISO8859_1"),"TIS-620");
+    }
+    if(request.getParameter("date_bill_receive")!=null){
+        date_bill_receive = new String (request.getParameter("date_bill_receive").getBytes("ISO8859_1"),"TIS-620");
+    }
+    if(request.getParameter("date_bill_make")!=null){
+        date_bill_make = new String (request.getParameter("date_bill_make").getBytes("ISO8859_1"),"TIS-620");
+    }
+    if(request.getParameter("flag")!=null){
+        flag = new String (request.getParameter("flag").getBytes("ISO8859_1"),"TIS-620");
+    }
+    if(abl_date.equals("")){
+        abl_date = config1.getDate("ddMMyyyy");
+    }
+    if(date_bill_receive.equals("")){
+        date_bill_receive = config1.getDate("ddMMyyyy");
+    }
+    if(date_bill_make.equals("")){
+        date_bill_make = config1.getDate("ddMMyyyy");
+    }
+    
+    //total_record_receive = config1.StringFormat(abldb.abl.getTotalRecordReceive().toString(),"integer");
+    total_record_approve = config1.StringFormat(abldb.abl.getTotalRecordApprove().toString(),"integer");
+    total_record_unapprove = config1.StringFormat(abldb.abl.getTotalRecordUnApprove().toString(),"integer");
+    //total_amount_receive = config1.StringFormat(abldb.abl.getTotalAmountReceive().toString(),"integer");
+    total_amount_approve = config1.StringFormat(abldb.abl.getTotalAmountApprove().toString(),"integer");
+    total_amount_unapprove = config1.StringFormat(abldb.abl.getTotalAmountUnApprove().toString(),"integer");
+    if(flag.equals("updatepatient")){
+        abldb.setPatientFullNameT(branch_id,abl_id);
+        abldb.setLabNameT(branch_id,abl_id);
+    }else if(flag.equals("auditbilllabid")){
+        abldb.setBillLabAuditAllBillId(branch_id,abl_id);
+    }else if(flag.equals("updateapprove")){
+        abldb.setBillLabApproveAllBillId(abl_id);
+    }
+    if (MultipartFormDataRequest.isMultipartFormData(request)){
+        //MultipartFormDataRequest mrequest = new MultipartFormDataRequest(request);
+        MultipartFormDataRequest mrequest = new MultipartFormDataRequest(request,null,-1,MultipartFormDataRequest.CFUPARSER,"tis-620",true);
+        if(request.getParameter("btlId")!=null) {
+            btlId = request.getParameter("btlId");
+        }
+        if(mrequest.getParameter("uploadfile")!=null) {
+            uploadfile = mrequest.getParameter("uploadfile");
+        }
+        if (mrequest != null) todo = mrequest.getParameter("todo");
+        if ((todo != null) && (todo.equalsIgnoreCase("upload"))) {
+            Hashtable files = mrequest.getFiles();
+            if ( (files != null) && (!files.isEmpty())) {
+                UploadFile file1 = (UploadFile) files.get("uploadfile");
+                config1.setDeleteFile(path_file+file1.getFileName());
+                if (file1 != null) text1=" Uploaded file : "+file1.getFileName()+" ("+file1.getFileSize()+" bytes)";
+                // Uses the bean n/var/www/intranet/ssn/ow to store specified by jsp:setProperty at the top.
+                upBean.store(mrequest, "uploadfile");
+                if(mrequest.getParameter("cbo_branch")!=null) {
+                    branch_id = mrequest.getParameter("cbo_branch");
+                }
+                if(mrequest.getParameter("txt_description")!=null) {
+                    description = mrequest.getParameter("txt_description");
+                }
+                if(mrequest.getParameter("txt_remark")!=null) {
+                    remark = mrequest.getParameter("txt_remark");
+                }
+                if(mrequest.getParameter("cbo_year")!=null) {
+                    year_id = mrequest.getParameter("cbo_year");
+                }
+                if(mrequest.getParameter("cbo_month")!=null) {
+                    month_id = mrequest.getParameter("cbo_month");
+                }
+                if(mrequest.getParameter("cbo_period")!=null) {
+                    period_id = mrequest.getParameter("cbo_period");
+                }
+                abldb.abl.setBranchId(branch_id);
+                abldb.abl.setBillLabDate("");
+                abldb.abl.setBillLabDescription(description);
+                abldb.abl.setBillLabId("");
+                abldb.abl.setBillLabMonth(month_id);
+                abldb.abl.setBillLabPeriod(period_id);
+                abldb.abl.setBillLabRemark(remark);
+                abldb.abl.setBillLabStatus("1");
+                abldb.abl.setBillLabYear(year_id);
+                abldb.abl.setDateBillMake("");
+                abldb.abl.setDateBillReceive("");
+                abldb.abl.setTotalAmountApprove(0.0);
+                abldb.abl.setTotalAmountReceive(0.0);
+                abldb.abl.setTotalAmountUnApprove(0.0);
+                abldb.abl.setTotalRecordApprove(0);
+                abldb.abl.setTotalRecordReceive(0);
+                abldb.abl.setTotalRecordUnApprove(0.0);
+                abldb.abl.setBillLabDate(billing_date);
+                abldb.abl.setBillLabActive("1");
+                //abldb.abl.setBranchId(branchId);
+                abldb.abl.setFilename(path_file+file1.getFileName());
+                abl_id = abldb.SaveBillLab(abldb.abl, "");
+
+                //save ="<A HREF='#' NAME='anchor_save_lab' ID='anchor_save_lab'> บันทึกข้อมูลผล lab &nbsp;<img src='images/savedrafticon.gif' alt='' width='16' " +
+        //"align='middle' height='16' border='0'></A>";
+                //file1="<input type='hidden' name='txt_file' id='txt_file' size='50'";
+                text = "&nbsp;&nbsp;&nbsp;&nbsp;"+save;
+                upload="1";
+            }
+        }
+    }
+}catch(Exception ex){
+    text = ex.getMessage();
+}
+abldb.abl = abldb.getBillLabByPK(abl_id);
+cbo_branch = combodb.getComboBranch(branch_id);
+cbo_month=combodb.getComboMonth(abldb.abl.getBillLabMonth());
+cbo_year=combodb.getComboYearHospital(abldb.abl.getBillLabYear());
+cbo_period=combodb.getComboPeriod(abldb.abl.getBillLabPeriod());
+tr_abl_detail = abldb.getTRBillLabDetail(abl_id,"", "date");
+if(abldb.abl.getBillLabDate().equals("")){
+    String date = config1.DateFormatShow2DB(config1.getDateDBHospital("ddMMyyyy"),"ddMMyyyy");
+    abldb.abl.setBillLabDate(date);
+}//bill_lab_detaildb.setBillLabAuditAllBillId(branch_id,bill_lab_id);
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=TIS-620">
+        
+        <style type="text/css" title="currentStyle">
+                @import "css/tab.css";
+                @import "css/demo_table.css";
+                @import "css/jquery-ui-1.7.2.custom.css";
+                @import "css/jquery.treeTable.css";
+        </style>
+       
+        <script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+        <script type="text/javascript" src="js/ui.core.js"></script>
+        <script type="text/javascript" src="js/ui.datepicker.js"></script>
+        <script type="text/javascript" src="js/ui.dialog.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#dialogVoid").hide();
+                $("#dialogSave").hide();
+                $("#loading_text").hide();
+                $("#dialogAudit").hide();
+                $("#dialogApprove").hide();
+                //$("#dialogVoid").hide();
+                //$("#divView").hide();
+                $("#anchor_save").click(showDialogNew);
+                $("#anchor_void").click(showDialogVoid);
+                $("#anchor_print").click(showDialogPrint);
+                $("#report_print").click(changesubmitprint);
+                $("#anchor_audit").click(showDialogAudit);
+                $("#anchor_approve").click(showDialogApprove);
+                $("#anchor_save_old").click(showDialogOld);
+                $("#dialogPrint").hide();
+                $("#loading").hide();
+                $("#anchor_set").click(setYear);
+                $("#txt_abl_date").datepicker({ dateFormat: 'dd-mm-yy' });
+                $("#txt_date_bill_receive").datepicker({ dateFormat: 'dd-mm-yy' });
+                $("#txt_date_bill_make").datepicker({ dateFormat: 'dd-mm-yy' });
+                $("#tab2").css("background-image","url('../images/tabright_click.gif')");
+                $("#tab22").html("<font color='red'><b>"+$("#tab22").html()+"</b></font>");
+            });
+function showDialogNew(){
+$("#dialogSave").dialog("destroy");
+$("#dialogSave").dialog({
+        bgiframe: true,
+        modal: true,
+        width: 400 ,
+        height: 250,
+        buttons: {
+            Ok: function() {
+                    saveBillingLab("save_billinglab");
+                    $(this).dialog('close');
+            },
+            Cancel: function() {
+                    $(this).dialog('close');
+            }
+        }
+    });
+}
+function showDialogOld(){
+$("#dialogSave").dialog("destroy");
+$("#dialogSave").dialog({
+        bgiframe: true,        modal: true,        width: 400 ,        height: 250,
+        buttons: {
+                Ok: function() {
+                        saveBillingLab("save_billinglab_old");
+                        $(this).dialog('close');
+                },
+                Cancel: function() {
+                        $(this).dialog('close');
+                }
+        }
+    });
+}
+function showDialogAudit(){
+$("#dialogAudit").dialog("destroy");
+$("#dialogAudit").dialog({
+        bgiframe: true,        modal: true,        width: 400 ,        height: 250,
+        buttons: {
+            Ok: function() {
+                    auditBillingLab();
+                    $(this).dialog('close');
+            },
+            Cancel: function() {
+                    $(this).dialog('close');
+            }
+        }
+    });
+}
+function showDialogApprove(){
+$("#dialogApprove").dialog("destroy");
+$("#dialogApprove").dialog({
+        bgiframe: true,        modal: true,        width: 400 ,        height: 250,
+        buttons: {
+            Ok: function() {
+                    approveBillingLab();
+                    $(this).dialog('close');
+            },
+            Cancel: function() {
+                    $(this).dialog('close');
+            }
+        }
+    });
+}
+function showDialogPrint(){
+$("#dialogPrint").dialog("destroy");
+$("#dialogPrint").dialog({
+        bgiframe: true,        modal: true,        width: 400 ,        height: 350
+    });
+    $("#oading_text").hide();
+}
+function showDialogVoid(){
+$("#dialogVoid").dialog("destroy");
+$("#dialogVoid").dialog({
+        bgiframe: true,        modal: true,        width: 400 ,        height: 250,
+        buttons: {
+                Ok: function() {
+                        voidLab();
+                        $(this).dialog('close');
+                },
+                Cancel: function() {
+                        $(this).dialog('close');
+                }
+        }
+    });
+}
+function showLoader() {
+    $("#loading").show();
+}
+function hideLoader() {
+    $("#loading").hide();
+}
+function hideLoaderRefresh(){
+    $("#loading").hide();
+    window.location="billinglab_add.jsp?flagpage=viewdetail&abl_id="+$("#txt_abl_id").val();
+}
+function setYear(){//$("#cbo_contact :selected").val();
+    //alert("aaa "+$("#cbo_year :selected").val());
+    var des = $("#txt_description").val();
+    $("#txt_description").val("ประจำปี "+ $("#cbo_year :selected").text()+ " เดือน "+ $("#cbo_month :selected").text()+ " "+ $("#cbo_period :selected").text());
+}
+function changesubmitprint(){
+    document.forms[0].action = "rpt_report_view.jsp?txt_form="+$("#txt_form").val()
+        +"&cbo_branch="+$("#cbo_branch").val()+"&rpt_billinglab_voucher="+$("#rpt_billinglab_voucher").attr("checked")
+        +"&year_id="+$("#cbo_year").val()+"&month_id="+$("#cbo_month").val()
+        +"&period_id="+$("#cbo_period").val()+"&abl_id="+$("#txt_abl_id").val()
+        +"&rpt_billinglab="+$("#rpt_billinglab").attr("checked");
+    document.forms[0].submit();
+}
+function saveBillingLab(flag){
+    showLoader();
+    $("#divView").load("billinglab_f_save.jsp",
+        {branch_id : $("#cbo_branch").val(),flagpage : flag, year_id : $("#cbo_year :selected").val(),
+        month_id : $("#cbo_month :selected").val(), period_id : $("#cbo_period :selected").val(),
+        description : $("#txt_description").val(), remark : $("#txt_remark").val(), abl_id : $("#txt_abl_id").val()},
+        function() { window.location="billinglab_add.jsp?flagpage=view&abl_id="+$("#txt_abl_id").val();});
+}
+function showDetail(orderDate){
+    //alert("aaa");
+    window.open("billinglab_detail_view.jsp?abl_id="+$("#txt_abl_id").val()
+        +"&branch_id="+$("#cbo_branch").val()+"&flagpage=view_day&date_order="+orderDate,
+    '_blank','width=1020, height=800, left=0,top=0,channelmode=no,status=no,fullscreen=no,menubar=no,resizable=no,scrollbars=yes,location=no,directories=no',true);
+}
+function voidLab(){
+    showLoader();
+    $("#divView").load("billinglab_f_save.jsp",
+        {branch_id : $("#cbo_branch").val(),flagpage : "void_billing_lab", abl_id : $("#txt_abl_id").val()},
+        function() {hideLoader();});
+        window.location="billinglab_view.jsp?flagpage=view";
+}
+function auditBillingLab(){
+    showLoader();
+    $("#divView").load("billinglab_f_save.jsp",
+        {branch_id : $("#cbo_branch").val(),flagpage : "audit_billing_lab", abl_id : $("#txt_abl_id").val()},
+        function() {hideLoaderRefresh();});
+        
+}
+function approveBillingLab(){
+    showLoader();
+    $("#divView").load("billinglab_f_save.jsp",
+        {branch_id : $("#cbo_branch").val(),flagpage : "approve_billing_lab", abl_id : $("#txt_abl_id").val()},
+        function() {hideLoaderRefresh();});
+        //window.location="billinglab_add.jsp?flagpage=view";
+}
+        </script>
+    </head>
+    <body>
+        <form name="billinglab_add" id="billinglab_add" method="post" enctype="multipart/form-data">
+            <%@include  file="billinglab_header.jsp" %>
+            <table><tr><td>
+            <table border="0" width="100%" align="center">
+                <tbody>
+                    <% if(!flagpage.equals("new")) { %><tr><th colspan="3" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><A HREF="#" NAME="anchor_audit" ID="anchor_audit">
+        1. ตรวจข้อมูล<img src="images/printer-a.png" alt="" align="top" border="0"></A></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><A HREF="#" NAME="anchor_approve" ID="anchor_approve">
+        2. อนุมัติข้อมูล<img src="images/printer-a.png" alt="" align="top" border="0"></A></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </th> </tr>
+                    <tr><% } %>
+                        <th >สาขา</th>
+                        <td><select name="cbo_branch" id="cbo_branch" ><%out.print(cbo_branch); %></select>
+                            <label>&nbsp;ปี&nbsp;<select name="cbo_year" id="cbo_year" >
+                                <%out.print(cbo_year); %>
+                </select></label>
+                <label>&nbsp;เดือน&nbsp;<select name="cbo_month" id="cbo_month" ><%out.print(cbo_month); %></select></label>
+                <label>&nbsp;งวด&nbsp;<select name="cbo_period" id="cbo_period" ><%out.print(cbo_period); %></select></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <A HREF="#" NAME="anchor_set" ID="anchor_set">สร้าง&nbsp;<img src="images/navigate_check.gif" alt="" align="button" border="0"></A>&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <% if(!flagpage.equals("new")){ %><A HREF='#' NAME='anchor_save_old' ID='anchor_save_old'> บันทึกข้อมูล &nbsp;<img src='images/savedrafticon.gif' alt='' width='16' align='middle' height='16' border='0'></A><% } %>
+                        </td>
+                        <td><div id="loading">  <img src="images/ajax-loader1.gif" name="loader" id="loader" alt=""></div></td>
+                    </tr>
+                    <tr>
+                        <th>รายละเอียด</th>
+            <td colspan="2"><input type="text" name="txt_description" id="txt_description" title="afdasfsadf" value="<% out.print(abldb.abl.getBillLabDescription());%>" size="40" />
+    &nbsp;&nbsp;<label>หมายเหตุ&nbsp;<input type="text" name="txt_remark" id="txt_remark" value="<% out.print(abldb.abl.getBillLabRemark());%>" size="30"/></label></td>
+                    </tr>
+                    <tr>
+                        <th>วันทำข้อมูล</th>
+    <td colspan="2" ><input type="text" size="8" name="txt_abl_date" id="txt_abl_date" value="<% out.print(abldb.config1.DateFormatDB2Show(abldb.abl.getBillLabDate(),"ddMMyyyy"));%>" readonly />
+    <label>เลขที่นำเข้า<input type="text" size="10" name="txt_abl_id" id="txt_abl_id" value="<% out.print(abldb.abl.getBillLabId());%>" readonly /></label>
+    &nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp; <A HREF="#" NAME="anchor_void" ID="anchor_void">
+                ยกเลิกรายการนี้&nbsp;<img src="images/trash1.gif" alt="" align="top" border="0"></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><A HREF="#" NAME="anchor_print" ID="anchor_print">
+        พิมพ์รายงาน<img src="images/printer-a.png" alt="" align="top" border="0"></A></label></td>
+                    </tr>
+                    <% if((flagpage.equals("new"))) { %>
+                    <tr>
+                        <th>นำเข้าข้อมูล</th>
+<td><input type="file" name="uploadfile" id="uploadfile" size="45" value="<%out.print(uploadfile);%>">&nbsp;&nbsp;<% out.print(text1); %>
+                            </td>
+<td ><input type="submit" name="submit" id="submit" value="Upload"> <input type="hidden" name="todo" id="todo" value="upload">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <% if(upload.equals("1")) { %>
+            <A HREF='#' NAME='anchor_save' ID='anchor_save'> บันทึกข้อมูล &nbsp;<img src='images/savedrafticon.gif' alt='' width='16' align='middle' height='16' border='0'></A><% } %>
+                            </td>
+                    </tr>
+                    <% } %>
+<tr ><th>รายละเอียด</th><td colspan="2">
+                <label>ข้อมูลได้รับ&nbsp;<input type="text" name="txt_total_record_receive" id="txt_total_record_receive"
+                value="<% out.print(config1.IntegerFormat(abldb.abl.getTotalRecordReceive().toString()));%>" size="6" readonly /></label>
+&nbsp;<label>&nbsp;ข้อมูลอนุมัติ&nbsp;<input type="text" name="txt_total_record_approve" id="txt_total_record_approve"
+             value="<% //out.print(total_record_approve);%>" size="4" readonly></label>
+&nbsp;<label>&nbsp;ข้อมูลไม่อนุมัติ&nbsp;<input type="text" name="txt_total_record_unapprove" id="txt_total_record_unapprove"
+             value="<% //out.print(total_record_unapprove);%>" size="4" readonly></label>
+ &nbsp;&nbsp;&nbsp;&nbsp;<label>&nbsp;เงินวางบิล&nbsp;<input type="text" name="txt_total_amount_receive" id="txt_total_amount_receive"
+             value="<% out.print(config1.NumberFormat(abldb.abl.getTotalAmountReceive()));%>" size="10" readonly></label>
+    &nbsp;&nbsp;เงินอนุมัติ <input type="text" name="txt_total_amount_approve" id="txt_total_amount_approve"
+           value="<% //out.print(total_amount_approve);%>" size="10" readonly/>
+ &nbsp;<label>&nbsp;เงินไม่อนุมัติ <input type="text" name="txt_total_amount_unapprove" id="txt_total_amount_unapprove"
+           value="<% //out.print(total_amount_unapprove);%>" size="10" readonly></label>
+            </td></tr>
+                </tbody>
+            </table>
+                    </td> </tr><tr><td><% //out.print(text); %></td> </tr> </table>
+
+<div id="dialogVoid" title="ยกเลิกรายการ">
+    <table widht="100%"><tr><th colspan="2" >ต้องการยกเลิกรายการนี้</th></tr>
+        <tr>
+            <th class="style14b">เลขที่นำเข้า</th><td><%out.print(abldb.abl.getBillLabId()); %></td>
+      </tr>
+    </table>
+
+</div>
+<div id="dialogSave" title="บันทึกรายการ">
+    <table widht="100%"><tr><th colspan="2" >ต้องการบันทึก</th></tr>
+        <tr>
+            <th class="style14b">เลขที่นำเข้า</th><td><%out.print(abldb.abl.getBillLabId()); %></td>
+      </tr>
+    </table>
+</div>
+<div id="dialogAudit" title="ตรวจรายการ">
+    <table widht="100%"><tr><th colspan="2" >ต้องการตรวจรายการ</th></tr>
+        <tr>
+            <th class="style14b">เลขที่นำเข้า</th><td><%out.print(abldb.abl.getBillLabId()); %></td>
+      </tr>
+    </table>
+</div>
+  <div id="dialogApprove" title="อนุมัติรายการ">
+    <table widht="100%"><tr><th colspan="2" >ต้องการอนุมัติรายการ</th></tr>
+        <tr>
+            <th class="style14b">เลขที่นำเข้า</th><td><%out.print(abldb.abl.getBillLabId()); %></td>
+      </tr>
+    </table>
+</div>
+      <div id="divView" ></div>
+      <div id="dialogPrint">
+            <table><tr><th scope="row" ><div align="left">รายงาน :</div></th></tr>
+        <tr><td class="style14b"><div align="left">
+          <label><input type="radio" name="txt_report_name" value="lab_bill" id="rpt_billinglab_voucher"  >001 (ใบสั่งจ่าย lab)</label>
+          <br><label><input type="radio" name="txt_report_name" value="lab_bill_item" id="rpt_billinglab" >002 (ใบบันทึกการจ่ายเงิน lab)</label>
+          <br><br><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <A HREF="#" NAME="report_print" ID="report_print"> พิมพ์ข้อมูล &nbsp;<img src="images/printer-a.png" alt="" width="16" align="middle"
+      height="16" border="0"></A></label>
+          </div>
+<input type="hidden" name="txt_flag" id="txt_flag">
+        <input type="hidden" name="txt_form" id="txt_form" value="daily">
+        </td>
+      </tr>
+      <tr><td><div id="loading_text">  <img src="images/ajax-loader1.gif" name="loader" id="loader" alt=""></div></td> </tr> </table>
+        </div>
+</form>
+
+
+
+
+<!--<table border="0" width="720" align="center">
+    <thead>
+        <tr align="center" class='style14r'><td width="5" align="center">ลำดับที่</td>
+            <td width="8">วันที่</td>
+            <td width="10">จำนวนผู้ป่วย</td>
+            <td width="10">จำนวนรายการ</td>
+            <td width="10">จำนวนเงินวางบิล</td>
+            <td width="20">จำนวนที่ตรวจพบ</td>
+            <td width="20">จำนวนที่ตรวจไม่พบ</td>
+            <td width="10">จำนวนเงินอนุมัติ</td>
+    </tr></thead>
+    <tbody>
+        
+                </tbody>
+</table>-->
+<%out.print(tr_abl_detail); %>
+    </body>
+</html>

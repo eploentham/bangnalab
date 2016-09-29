@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="admin_bill_lab" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="header1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="header2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="header3" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_abl_id" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["11100002"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="header4" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     admin_t_bill_lab."bill_lab_id" AS admin_t_bill_lab_bill_lab_id,
+     admin_t_bill_lab."bill_lab_description" AS admin_t_bill_lab_bill_lab_description,
+     admin_t_bill_lab."bill_lab_date" AS admin_t_bill_lab_bill_lab_date,
+     admin_t_bill_lab."total_record_approve" AS admin_t_bill_lab_total_record_approve,
+     admin_t_bill_lab."total_amount_approve" AS admin_t_bill_lab_total_amount_approve,
+     admin_t_bill_lab."bill_lab_year" AS admin_t_bill_lab_bill_lab_year,
+     admin_t_bill_lab."bill_lab_month" AS admin_t_bill_lab_bill_lab_month,
+     admin_t_bill_lab."bill_lab_period" AS admin_t_bill_lab_bill_lab_period,
+     admin_t_bill_lab."total_record_receive" AS admin_t_bill_lab_total_record_receive,
+     admin_t_bill_lab."total_amount_receive" AS admin_t_bill_lab_total_amount_receive,
+     admin_t_bill_lab."date_bill_make" AS admin_t_bill_lab_date_bill_make,
+     case admin_t_bill_lab.bill_lab_month when '01'then 'มกราคม'when '02'then 'กุมภาพันธ์'when '03'then 'มีนาคม'when '04'then 'เมษายน'when '05'then 'พฤษภาคม'when '06'then 'มิถุนายน'when '07'then 'กรกฏาคม'when '08'then 'สิงหาคม'when '09'then 'กันยายน'when '10'then 'ตุลาคม'when '11'then 'พฤศจิกายน'when '12'then 'ธันวาคม'else admin_t_bill_lab.bill_lab_month end as monthnamet,
+     case admin_t_bill_lab.bill_lab_period when '1'then 'งวดต้นเดือน'when '2'then 'งวดกลางเดือน'else admin_t_bill_lab."bill_lab_period" end as periodnamet,
+     admin_t_bill_lab."bill_lab_remark" AS admin_t_bill_lab_bill_lab_remark
+FROM
+     "public"."admin_t_bill_lab" admin_t_bill_lab
+
+where admin_t_bill_lab.bill_lab_id=$P{p_abl_id}]]>
+	</queryString>
+	<field name="admin_t_bill_lab_bill_lab_id" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_bill_lab_description" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_bill_lab_date" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_total_record_approve" class="java.lang.Integer"/>
+	<field name="admin_t_bill_lab_total_amount_approve" class="java.lang.Double"/>
+	<field name="admin_t_bill_lab_bill_lab_year" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_bill_lab_month" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_bill_lab_period" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_total_record_receive" class="java.lang.Integer"/>
+	<field name="admin_t_bill_lab_total_amount_receive" class="java.lang.Double"/>
+	<field name="admin_t_bill_lab_date_bill_make" class="java.lang.String"/>
+	<field name="monthnamet" class="java.lang.String"/>
+	<field name="periodnamet" class="java.lang.String"/>
+	<field name="admin_t_bill_lab_bill_lab_remark" class="java.lang.String"/>
+	<group name="bill_lab_id" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{admin_t_bill_lab_bill_lab_id}]]></groupExpression>
+		<groupHeader>
+			<band height="66" splitType="Stretch">
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="359" y="0" width="176" height="18"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["เลขที่ใบรับวางบิล :"+$F{admin_t_bill_lab_bill_lab_id}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="0" y="0" width="250" height="18"/>
+					<textElement>
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["ประจำงวด "+$F{admin_t_bill_lab_bill_lab_year}+" "+$F{monthnamet}+" "+$F{periodnamet}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="359" y="18" width="175" height="18"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["วันที่ทำรายการ "+$F{admin_t_bill_lab_date_bill_make}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement key="line-1" x="0" y="36" width="534" height="1"/>
+				</line>
+				<staticText>
+					<reportElement key="staticText-6" x="371" y="41" width="74" height="16"/>
+					<textElement textAlignment="Center">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[จำนวนเงิน]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-7" x="2" y="41" width="256" height="16"/>
+					<textElement textAlignment="Center">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[รายละเอียดเอกสาร]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-8" x="456" y="41" width="74" height="16"/>
+					<textElement textAlignment="Center">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[รวมเงิน]]></text>
+				</staticText>
+				<line>
+					<reportElement key="line-2" x="0" y="62" width="534" height="1"/>
+				</line>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-1" x="0" y="18" width="359" height="16"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" size="8" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{header4}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50" splitType="Stretch">
+				<staticText>
+					<reportElement key="staticText-9" x="0" y="12" width="131" height="16"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[ผู้จัดทำ...............................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-10" x="131" y="12" width="142" height="16"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[ผู้ตรวจสอบ ............................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-11" x="274" y="12" width="129" height="16"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[ผู้อนุมัติ...............................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-12" x="405" y="12" width="129" height="16"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[ผู้รับเงิน...............................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-9" x="0" y="34" width="393" height="16"/>
+					<textElement textAlignment="Left">
+						<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[FM-AFD-007 (แก้ไขครั้งที่ 00 15/02/53)]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="48" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="0" y="0" width="534" height="16"/>
+				<textElement textAlignment="Left">
+					<font fontName="Tahoma" size="8" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{header1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="0" y="16" width="534" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{header2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-3" x="0" y="32" width="534" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{header3}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="201" splitType="Stretch">
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement key="textField" x="155" y="104" width="84" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{admin_t_bill_lab_total_record_receive}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement key="textField" x="155" y="122" width="84" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{admin_t_bill_lab_total_record_approve}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" x="155" y="85" width="84" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{admin_t_bill_lab_total_amount_receive}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" x="366" y="41" width="84" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{admin_t_bill_lab_total_amount_approve}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="8" y="8" width="516" height="18"/>
+				<textElement>
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{admin_t_bill_lab_bill_lab_description}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="21" y="168" width="511" height="18"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["หมายเหตุ "+$F{admin_t_bill_lab_bill_lab_remark}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-1" x="21" y="104" width="134" height="21"/>
+				<textElement>
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนข้อมูลที่ได้รับ :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-2" x="21" y="122" width="128" height="15"/>
+				<textElement>
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนข้อมูลที่อนุมัติ :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="21" y="85" width="128" height="15"/>
+				<textElement>
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนเงินที่วางบิล :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="21" y="41" width="128" height="15"/>
+				<textElement>
+					<font fontName="Tahoma" pdfFontName="tahoma.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนเงินที่อนุมัติ :]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-3" x="0" y="-30" width="1" height="231"/>
+			</line>
+			<line>
+				<reportElement key="line-4" x="366" y="-30" width="1" height="231"/>
+			</line>
+			<line>
+				<reportElement key="line-5" x="451" y="-30" width="1" height="231"/>
+			</line>
+			<line>
+				<reportElement key="line-6" x="534" y="-30" width="1" height="231"/>
+			</line>
+			<line>
+				<reportElement key="line-7" x="0" y="199" width="534" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="19" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
