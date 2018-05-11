@@ -338,11 +338,16 @@ function showDetail(orderDate){
     '_blank','width=1020, height=800, left=0,top=0,channelmode=no,status=no,fullscreen=no,menubar=no,resizable=no,scrollbars=yes,location=no,directories=no',true);
 }
 function voidLab(){
-    showLoader();
+    //alert("aaa");
+    //showLoader();
     $("#divView").load("billinglab_f_save.jsp",
         {branch_id : $("#cbo_branch").val(),flagpage : "void_billing_lab", abl_id : $("#txt_abl_id").val()},
         function() {hideLoader();});
         window.location="billinglab_view.jsp?flagpage=view";
+    
+    $("#divView").load("billinglab_f_save.jsp",
+        {branch_id : $("#cbo_branch").val(),flagpage : "void_billing_lab", abl_id : $("#txt_abl_id").val()},
+        function() { window.location="billinglab_view.jsp?flagpage=view";});
 }
 function auditBillingLab(){
     showLoader();

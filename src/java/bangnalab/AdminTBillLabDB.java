@@ -591,7 +591,8 @@ public class AdminTBillLabDB {
             conn = config1.getConnectionBangna();
             st = conn.createStatement();
             abl = getBillLabByPK(alb_id);
-            br = new BufferedReader(new FileReader(abl.getFilename()));
+            //br = new BufferedReader(new FileReader(abl.getFilename()));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(abl.getFilename()), "UTF-8"));
             try {
                 while ((line = br.readLine()) != null) {
                     try {
@@ -599,7 +600,17 @@ public class AdminTBillLabDB {
                         if(i==151){
                             err="";
                         }
+                        if(i==9000){
+                            err="";
+                        }
+                        if(i==9030){
+                            err="";
+                        }
+                        if(i==9049){
+                            err="";
+                        }
                         String[] aaa = line.split("\\|");
+                        if(aaa.length<colItemName) continue;
                         visitVn = aaa[colVn];
                         orderDate = aaa[colOrderDate];
                         visitHn = aaa[colHn];
@@ -609,7 +620,7 @@ public class AdminTBillLabDB {
                         pricenet = aaa[colPriceNet];
                         itemNumber = aaa[colItemNumber];
                         itemName = aaa[colItemName];
-                        if(orderDate.equals("05-01-2558")){
+                        if(visitVn.equals("314/18-04-2560")){
                             err="";
                         }
                         abl_d = new AdminTBillLabDetail();
@@ -633,6 +644,9 @@ public class AdminTBillLabDB {
                         abl_d.setLabStatus("1");
                         SaveBillLabDetail(conn,st,abl_d);
                     } catch (IOException ex) {
+                        Logger.getLogger(AdminTBillLabDB.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    catch (Exception ex) {
                         Logger.getLogger(AdminTBillLabDB.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -868,9 +882,9 @@ public class AdminTBillLabDB {
 //                +"<td align='center' width='10'>"+bill_lab_detail.getNettotalReceive()+"</td>"
 //                +"<td align='center' width='10'>"+bill_lab_detail.getNettotalApprove()+"</td></tr>";
             txtH="<table border='0' width='100%' align='center'><thead>"
-        +"<tr align='center' class='style14r'><th width='5' align='center'>≈”¥—∫∑’Ë</th>"
-            +"<th width='8'>«—π∑’Ë</th>"+"<th width='10'>®π ºŸÈªË«¬</th>"+"<th width='10'>®π √“¬°“√</th>"+"<th width='10'>®π ‡ß‘π«“ß∫‘≈</th>"
-            +"<th width='20'>®π ∑’Ëµ√«®æ∫</th>"+"<th width='20'>®π ∑’Ëµ√«®‰¡Ëæ∫</th>"+"<th width='10'>®π ‡ß‘πÕπÿ¡—µ‘</th>"+"</tr></thead><tbody>";
+        +"<tr align='center' class='style14r'><th width='5' align='center'>‡∏•‡∏≥‡∏î‡∏±‡∏ö‡∏ó‡∏µ‡πà</th>"
+            +"<th width='8'>‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà</th>"+"<th width='10'>‡∏à‡∏ô ‡∏ú‡∏π‡πâ‡∏õ‡πà‡∏ß‡∏¢</th>"+"<th width='10'>‡∏à‡∏ô ‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£</th>"+"<th width='10'>‡∏à‡∏ô ‡πÄ‡∏á‡∏¥‡∏ô‡∏ß‡∏≤‡∏á‡∏ö‡∏¥‡∏•</th>"
+            +"<th width='20'>‡∏à‡∏ô ‡∏ó‡∏µ‡πà‡∏ï‡∏£‡∏ß‡∏à‡∏û‡∏ö</th>"+"<th width='20'>‡∏à‡∏ô ‡∏ó‡∏µ‡πà‡∏ï‡∏£‡∏ß‡∏à‡πÑ‡∏°‡πà‡∏û‡∏ö</th>"+"<th width='10'>‡∏à‡∏ô ‡πÄ‡∏á‡∏¥‡∏ô‡∏≠‡∏ô‡∏∏‡∏°‡∏±‡∏ï‡∏¥</th>"+"</tr></thead><tbody>";
         txtF=" </tbody></table>";
             }else if(field.equals("date_day")){
                 if(ablD.getStatusApprove().equals("3")){
@@ -893,7 +907,7 @@ public class AdminTBillLabDB {
         +"<input type='checkbox' name='chk_repair_status' value='on' id='chk_status_approve_"
     +ablD.getPatientHnNo()+"_"+ablD.getLabId()+"' name='chk_status_approve_"
     +ablD.getPatientHnNo()+"_"+ablD.getLabId()+"' "+selected+">"
-        +"Õπÿ¡—µ‘</label></td>"
+        +"‡∏≠‡∏ô‡∏∏‡∏°‡∏±‡∏ï‡∏¥</label></td>"
                 +"<td align='center' width='10'><A HREF='javascript:showDetail("
                 +date_order1+");'>"
                 +txt_color+ablD.getPatientHnNo()+txt_color1+"</A></td>"
@@ -1371,7 +1385,7 @@ public class AdminTBillLabDB {
         try {
             conn = config1.getConnectionBangna();
             st = conn.createStatement();
-            sql="Select sum("+abl_d.getFPriceDiscountReceive()+") as net_price,count(1) as cnt "//µÈÕß„™È price discount ‡æ√“–‡ªÁπ√“§“∑’Ë≈¥·≈È«
+            sql="Select sum("+abl_d.getFPriceDiscountReceive()+") as net_price,count(1) as cnt "//‡∏ï‡πâ‡∏≠‡∏á‡πÉ‡∏ä‡πâ price discount ‡πÄ‡∏û‡∏£‡∏≤‡∏∞‡πÄ‡∏õ‡πá‡∏ô‡∏£‡∏≤‡∏Ñ‡∏≤‡∏ó‡∏µ‡πà‡∏•‡∏î‡πÅ‡∏•‡πâ‡∏ß
                     + "From "+abl_d.getAdminTBillLabDetail()+" "
                 + " Where "+abl.getFBillLabId() + " ='"+ablId +"'";
             ResultSet rs = st.executeQuery(sql);
@@ -1405,16 +1419,16 @@ public class AdminTBillLabDB {
                 +"</tr>";
         }
         if(text.equals("")){
-            text="<tr class='style14r' "+row_color+"> <td align='center'>1</td><td>‰¡Ëæ∫¢ÈÕ¡Ÿ≈</td><td></td><td></td></tr>";
+            text="<tr class='style14r' "+row_color+"> <td align='center'>1</td><td>‡πÑ‡∏°‡πà‡∏û‡∏ö‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•</td><td></td><td></td></tr>";
         }
         txtH="<table border='0' width='100%'><thead><tr bgcolor='#336699'  class='style14w'>"
-                + "<th width='15' ><div align='center'>≈”¥—∫</div></th>"
-                + "<th width='15' ><div align='center'>‡≈¢∑’Ë</div></th>"
-                + "<th width='150' ><div align='center'>√“¬≈–‡Õ’¬¥</div></th>"
-                + "<th width='150' bgcolor='#336699' ><div align='center'>À¡“¬‡Àµÿ</div></th>"
-                + "<th width='90' bgcolor='#336699' ><div align='center'>®”π«π¢ÈÕ¡Ÿ≈</div></th>"
-                + "<th width='90' bgcolor='#336699' ><div align='center'>‡ß‘π«“ß∫‘≈</div></th>"
-                + "<th width='90' bgcolor='#336699' ><div align='center'>‡ß‘πÕπÿ¡—µ‘</div></th>"
+                + "<th width='15' ><div align='center'>‡∏•‡∏≥‡∏î‡∏±‡∏ö</div></th>"
+                + "<th width='15' ><div align='center'>‡πÄ‡∏•‡∏Ç‡∏ó‡∏µ‡πà</div></th>"
+                + "<th width='150' ><div align='center'>‡∏£‡∏≤‡∏¢‡∏•‡∏∞‡πÄ‡∏≠‡∏µ‡∏¢‡∏î</div></th>"
+                + "<th width='150' bgcolor='#336699' ><div align='center'>‡∏´‡∏°‡∏≤‡∏¢‡πÄ‡∏´‡∏ï‡∏∏</div></th>"
+                + "<th width='90' bgcolor='#336699' ><div align='center'>‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•</div></th>"
+                + "<th width='90' bgcolor='#336699' ><div align='center'>‡πÄ‡∏á‡∏¥‡∏ô‡∏ß‡∏≤‡∏á‡∏ö‡∏¥‡∏•</div></th>"
+                + "<th width='90' bgcolor='#336699' ><div align='center'>‡πÄ‡∏á‡∏¥‡∏ô‡∏≠‡∏ô‡∏∏‡∏°‡∏±‡∏ï‡∏¥</div></th>"
                 + "</tr></thead>";
         txtF="</table>";
         return txtH+text+txtF;
